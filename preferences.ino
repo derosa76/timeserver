@@ -16,7 +16,7 @@ boolean preferences_set_string(String key, String value){
 
   //da stringa a charArray
   int str_len2 = key.length() + 1; 
-  char key_ca[str_len];
+  char key_ca[str_len2];//era   char key_ca[str_len];
   key.toCharArray(key_ca, str_len2);
 
   
@@ -38,7 +38,7 @@ String preferences_get_string(String key){
 
   //da stringa a charArray
   int str_len2 = key.length() + 1; 
-  char key_ca[str_len];
+  char key_ca[str_len2];  //era char key_ca[str_len];
   key.toCharArray(key_ca, str_len2);
   
   if(preferences.begin(preferences_namespace_ca)){
