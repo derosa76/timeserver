@@ -15,6 +15,11 @@ void wserver_setup(){
     request->send(200, "text/plain", msg);
   });
 
-    server.onNotFound(notFound);
-    server.begin();
+
+  server.on("/weblog", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(200, "text/html", get_weblog());
+  });
+
+  server.onNotFound(notFound);
+  server.begin();
 }
