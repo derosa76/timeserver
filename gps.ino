@@ -30,7 +30,24 @@ void gps_setup(){
 }
 
 void gps_run(unsigned long dt){
-  while (Serial2.available()) gps.encode(Serial2.read());
+  
+  // AGGIUNGI QUESTO BLOCCO PER DEBUG
+  static unsigned long last_debug_report = 0;
+  static int bytes_count = 0;
+  
+  while (Serial2.available()) {
+    gps.encode(Serial2.read());
+    bytes_count++;  // conta i byte ricevuti
+  }
+  
+  // Ogni 10 secondi logga quanti byte ha ricevuto
+  if (millis() - last_debug_report > 10000) {
+    otalog("GPS: ricevuti " + String(bytes_count) + " bytes in 10 sec");
+    bytes_count = 0;
+    last_debug_report = millis();
+  }
+  // FINE BLOCCO DEBUG
+  
   if(millis()>=gps_show_last_time+dt){
     gps_show_last_time=millis();
     set_date_time();
