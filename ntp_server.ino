@@ -1,4 +1,4 @@
-
+/*
 void ntpd_setup() {
   // Avvio server UDP sulla porta 123
   ntpUDP.begin(123);
@@ -42,4 +42,5 @@ void ntpd_run() {
     Serial.println("Richiesta NTP processata");
   }
 }
+*/
 
