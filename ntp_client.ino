@@ -22,6 +22,7 @@ void ntp_cl_run(unsigned long dt)
     if (ntp_client.isTimeSet()) {
       time_object_ntp.setTime(ntp_client.getEpochTime());
       ntp_time_is_set=true;
+      ntp_server_mark_ntp_sync();
       if (time_object_ntp.getYear()>ntp_year){
         Serial.print("NTP: ntp_year è cambiato da "+String(ntp_year)+" a ");
         ntp_year=time_object_ntp.getYear();

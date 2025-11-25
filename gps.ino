@@ -97,6 +97,7 @@ void set_date_time()
       gpsTimeLastSetMillis=millis();
       gpsTimeIsSet=true;
       gpsTimeIsReliable=true;
+      ntp_server_mark_gps_sync();
     }
     if (millis()-gpsTimeLastSetMillis>2*60*60*1000) gpsTimeIsReliable=false; //se il dato non è fresco, non aggiorno l'oggetto ESP32Time, e se il dato è più vecchio diventa NON RELIABLE 
     //perchè la frequenza del ll'oscillatore ha accuratezza dello 0.5% e quindi può perdere 18 secondi all'ora
