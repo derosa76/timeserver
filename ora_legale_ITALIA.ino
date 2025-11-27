@@ -1,17 +1,24 @@
-/*
- * Calcola l'epoch GMT dell'inizio e fine ora legale in Italia
- * Solo calcoli numerici, nessun oggetto ESP32Time
- * 
- * VERIFICATO per 2025:
- * - inizio_ora_legale(2025) → 30 marzo 2025 01:00 GMT (domenica)
- * - fine_ora_legale(2025) → 26 ottobre 2025 01:00 GMT (domenica)
- */
 
-/*
- * Ritorna l'epoch GMT della fine ora legale per un dato anno
- * (ultima domenica di ottobre alle 01:00 GMT)
- */
+// a partire da un oggetto tempo GMT ESP32Time 
+// calcola l'offset dell'ora Italia rispetto a GMT, in secondi.
+// (offset = quanti secondi devo aggiungere a GMT)
+
+int time_offset_italia(ESP32Time t){
+  unsigned long ntp_inizio_ora_legale = inizio_ora_legale(t.getYear());
+  unsigned long ntp_fine_ora_legale = fine_ora_legale(t.getYear());
+  if (t.getEpoch() >= ntp_inizio_ora_legale) {
+    if (t.getEpoch() < ntp_fine_ora_legale) {
+      return 7200;
+    }
+  }
+  return 3600;
+}
+
+
 unsigned long fine_ora_legale(int year) {
+  // Finisce: ultima domenica di ottobre alle 03:00 ora legale italiana (GMT+2)
+  // In GMT: 03:00 - 2h = 01:00 GMT
+
   // Calcola giorni dal 1-gen-1970 al 31 ottobre dell'anno target
   unsigned long days = 0;
   
@@ -47,15 +54,14 @@ unsigned long fine_ora_legale(int year) {
     days--;
     dayOfWeek = (days + 4) % 7;
   }
-  
   return epoch;
 }
 
-/*
- * Ritorna l'epoch GMT dell'inizio ora legale per un dato anno
- * (ultima domenica di marzo alle 01:00 GMT)
- */
+
 unsigned long inizio_ora_legale(int year) {
+  //Inizia: ultima domenica di marzo alle 02:00 ora solare italiana (GMT+1)
+  //In GMT: 02:00 - 1h = 01:00 GMT
+
   // Calcola giorni dal 1-gen-1970 al 31 marzo dell'anno target
   unsigned long days = 0;
   
@@ -87,39 +93,3 @@ unsigned long inizio_ora_legale(int year) {
   return epoch;
 }
 
-
-
-
-
-
-
-
-
-
-
-// //faccio i conti come se fossimo GMT
-// //ESP32Time time_object_calcoli(0);
-
-// unsigned long fine_ora_legale(int year){
-//   ESP32Time time_object_calcoli(0);
-//   time_object_calcoli.setTime(0, 0, 1, 30, 10, year); //parto dalle ore 1 GMT dell'ultimo gg di ottobre (che con l'ora legale in Italia sono le 3)
-//   Serial.println("calcolo fine_ora_legale iterazioni:");
-//   Serial.println(String(time_object_calcoli.getEpoch())+":"+String(time_object_calcoli.getDayofWeek()));
-//   while (!(time_object_calcoli.getDayofWeek()==0)) { //domenica è 0
-//     time_object_calcoli.setTime(time_object_calcoli.getEpoch()-86400);
-//     Serial.println(String(time_object_calcoli.getEpoch())+":"+String(time_object_calcoli.getDayofWeek()));
-//   }
-//   return time_object_calcoli.getEpoch();
-// }
-
-// unsigned long inizio_ora_legale(int year){
-//   ESP32Time time_object_calcoli(0);
-//   time_object_calcoli.setTime(0, 0, 1, 31, 3, year); //parto dalle ore 1 GMT dell'ultimo gg di marzo (ora solare, sono le 2 effettive Italia)
-//   Serial.println("calcolo inizio_ora_legale iterazioni:");
-//   Serial.println(String(time_object_calcoli.getEpoch())+":"+String(time_object_calcoli.getDayofWeek()));
-//   while (!(time_object_calcoli.getDayofWeek()==0)) { //domenica è 0
-//     time_object_calcoli.setTime(time_object_calcoli.getEpoch()-86400);
-//     Serial.println(String(time_object_calcoli.getEpoch())+":"+String(time_object_calcoli.getDayofWeek()));
-//   }
-//   return time_object_calcoli.getEpoch();
-// }

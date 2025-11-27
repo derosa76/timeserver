@@ -113,7 +113,10 @@ byte selectTimeSource(uint32_t* seconds, uint32_t* fraction) {
 // SETUP E LOOP
 // ============================================================================
 
+WiFiUDP ntpUDP;
+
 void ntpd_setup() {
+  
   ntpUDP.begin(123);
   last_gps_sync_millis = millis();
   last_ntp_sync_millis = millis();

@@ -16,7 +16,7 @@ String WS_cmd_interpreter(String cmd){
     String s_gps="0";
     if (gpsTimeIsReliable) s_gps=String(time_object_gps.getEpoch())+"(+"+String(gps_offset_italia)+")";
     String s_ntp="0";
-    if (ntp_client.isTimeSet()) s_ntp=String(time_object_ntp.getEpoch())+"(+"+String(ntp_offset_italia)+")";
+    if (ntp_time_is_set) s_ntp=String(time_object_ntp.getEpoch())+"(+"+String(ntp_offset_italia)+")";
     return s_gps+";"+s_ntp;
   }
   
@@ -33,7 +33,7 @@ String WS_cmd_interpreter(String cmd){
       msg+="GPS Time: "+time_object_gps.getTime("%Y-%m-%d %H:%M:%S")+"\r\n";
       msg+="Last GPS sync: "+String((millis()-gpsTimeLastSetMillis)/1000)+" sec ago\r\n";
     }
-    msg+="GPS Year: "+String(gps_year)+"\r\n";
+    msg+="GPS Year: "+String(time_object_gps.getYear())+"\r\n";
     msg+="GPS Offset Italia: "+String(gps_offset_italia)+"\r\n";
     msg+="\r\n";
     
@@ -44,7 +44,7 @@ String WS_cmd_interpreter(String cmd){
       msg+="NTP Epoch: "+String(time_object_ntp.getEpoch())+"\r\n";
       msg+="NTP Time: "+time_object_ntp.getTime("%Y-%m-%d %H:%M:%S")+"\r\n";
     }
-    msg+="NTP Year: "+String(ntp_year)+"\r\n";
+    msg+="NTP Year: "+String(time_object_ntp.getYear())+"\r\n";
     msg+="NTP Offset Italia: "+String(ntp_offset_italia)+"\r\n";
     msg+="\r\n";
     
@@ -52,6 +52,9 @@ String WS_cmd_interpreter(String cmd){
     msg+="[NTP SERVER]\r\n";
     msg+="Last GPS sync mark: "+String((millis()-last_gps_sync_millis)/1000)+" sec ago\r\n";
     msg+="Last NTP sync mark: "+String((millis()-last_ntp_sync_millis)/1000)+" sec ago\r\n";
+
+    msg+="ntp ts:"+timestamp(&time_object_ntp)+"\r\n";
+    msg+="gps ts:"+timestamp(&time_object_gps)+"\r\n";
     
     return msg;
   }
