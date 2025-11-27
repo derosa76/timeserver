@@ -1,4 +1,6 @@
 
+#include "IndependentTime.h"
+
 #include <WiFi.h>
 #include <ESPmDNS.h>
 #include <WiFiUdp.h>
@@ -12,9 +14,12 @@
 #include <ESPAsyncWebServer.h> 
 AsyncWebServer server(80);
 
-#include <ESP32Time.h>
-ESP32Time time_object_ntp(0); // GMT
-ESP32Time time_object_gps(0); // GMT
+//#include <ESP32Time.h>
+//ESP32Time time_object_ntp(0); // GMT
+//ESP32Time time_object_gps(0); // GMT
+
+IndependentTime time_object_ntp;
+IndependentTime time_object_gps;
 
 
 

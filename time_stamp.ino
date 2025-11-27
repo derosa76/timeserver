@@ -1,7 +1,7 @@
 
 String timestamp(){
   // Selezione sorgente temporale migliore
-  ESP32Time* time_source = nullptr;
+  IndependentTime* time_source = nullptr;
   
   if (gpsTimeIsSet) {
     time_source = &time_object_gps;
@@ -27,28 +27,26 @@ String timestamp(){
 
 
 /*
- * Genera un timestamp testuale da un oggetto ESP32Time
+ * Genera un timestamp testuale da un oggetto IndependentTime
  * 
  * Parametri:
- *   t - oggetto ESP32Time
+ *   t - oggetto IndependentTime
  *   
  * Ritorna:
  *   String formato "YYYY-MM-DD HH:MM:SS.mmm"
  *   Esempio: "2024-12-06 18:45:32.123"
  */
-String timestamp(ESP32Time* t) {
+String timestamp(IndependentTime* t) {
   char buffer[24];
   
-  // Estrai i millisecondi dalla parte frazionaria di micros()
-  unsigned long now_micros = micros();
-  unsigned int millis_part = (now_micros / 1000) % 1000;
+  // Millisecondi dall'oggetto tempo
+  unsigned int millis_part = t->getMillis();
   
-  // Formatta: YYYY-MM-DD HH:MM:SS.mmm
   sprintf(buffer, "%04d-%02d-%02d %02d:%02d:%02d.%03u",
           t->getYear(),
-          t->getMonth() + 1,      // getMonth() ritorna 0-11
+          t->getMonth() + 1,
           t->getDay(),
-          t->getHour(true),       // true = formato 24h
+          t->getHour(true),
           t->getMinute(),
           t->getSecond(),
           millis_part);

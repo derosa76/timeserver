@@ -3,7 +3,7 @@
 // calcola l'offset dell'ora Italia rispetto a GMT, in secondi.
 // (offset = quanti secondi devo aggiungere a GMT)
 
-int time_offset_italia(ESP32Time t){
+int time_offset_italia(IndependentTime& t){
   unsigned long ntp_inizio_ora_legale = inizio_ora_legale(t.getYear());
   unsigned long ntp_fine_ora_legale = fine_ora_legale(t.getYear());
   if (t.getEpoch() >= ntp_inizio_ora_legale) {
